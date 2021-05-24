@@ -544,7 +544,7 @@ footer {
     .cart-quantity-input {
   
         width: 40px;
-        padding: 0;
+        margin-right:2px;
    
     }
 
