@@ -5,8 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express')
 const app = express()
-const http = require('http')
-const reload = require('reload')
+
 const expressLayouts = require('express-ejs-layouts')
 const path = require('path')
 
@@ -29,6 +28,5 @@ app.use('/', indexRouter)
 
 
 
-const server = http.createServer(app)
-server.listen(process.env.PORT || 3000)
-reload(app)
+
+app.listen(process.env.PORT || 3000)
