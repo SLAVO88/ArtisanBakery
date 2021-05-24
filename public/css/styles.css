@@ -534,6 +534,14 @@ footer {
         font-size: 18px;
     }
 
+    .cart-total-title {
+        font-weight: bold;
+        font-size: 1.5em;
+        color:black;
+        margin-right: 1px;
+        margin-top: 10px;
+    }
+
     /* Turn off parallax scrolling for tablets and phones */
     /*.bgimg-1, .bgimg-2, .bgimg-3 {
                 background-attachment: scroll;*/
