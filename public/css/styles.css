@@ -487,7 +487,12 @@ footer {
     body {
         margin: 0px 0px;
     }
-
+    .cart-items{
+        margin:auto 50px;
+    }
+    .cart-total{
+        margin:auto 50px;
+    }
     .article-win {
 
         padding: 2px 150px 5px 150px;
@@ -507,6 +512,16 @@ footer {
 
 }
 
+@media only screen and (min-width: 1000px) {
+    
+    .cart-items{
+        margin:auto 200px;
+    }
+    .cart-total{
+        margin:auto 200px;
+    }
+    
+}
 
 /* On smaller screens, where height is less than 450px, the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
