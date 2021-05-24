@@ -1,3 +1,5 @@
+@import 'shared/shop.css';
+@import 'shared/buttons.css';
 * {
     box-sizing: border-box;
 }
@@ -203,7 +205,7 @@ footer {
 
 
 
-[class*="image"] {
+[class*="imagePar"] {
     display: block;
     height: 300px;
     width: 100%;
@@ -217,23 +219,23 @@ footer {
     justify-content: center;
 }
 
-.image1 {
+.imagePar1 {
     background-image: url("../images/shop.png");
     float: right;
 }
 
-.image2 {
+.imagePar2 {
     background-image: url("../images/cookies.jpg");
     float: right;
 }
 
-.image3 {
+.imagePar3 {
     background-image: url("../images/baker1.png");
 
     float: left;
 }
 
-.image2::after {
+.imagePar2::after {
     content: "";
     clear: both;
     display: table;
@@ -477,7 +479,7 @@ footer {
 
 
 @media only screen and (min-width: 768px) {
-    [class*="image"] {
+    [class*="imagePar"] {
         width: 50%;
         margin: 0px 15px;
     }

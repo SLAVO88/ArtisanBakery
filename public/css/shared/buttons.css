@@ -1,0 +1,19 @@
+.btn {
+    text-align: center;
+    vertical-align: middle;
+    padding: .67 em;
+    height: 2em;
+    cursor: pointer;
+}
+
+.btn-primary {
+    color: white;
+    background-color: #56CCF2;
+    border: none;
+    border-radius: .3em;
+    font-weight: bold;
+}
+
+.btn-primary:hover{
+    background-color: #2D9CDB;
+}

@@ -11,7 +11,12 @@ res.render('index')
 router.get('/about', (req, res) => {
     res.render('about')
         
-    })
+})
+
+router.get('/shop', (req, res) => {
+    res.render('shop/buy')
+            
+})
 
 
 // router.get('/css', (req, res) => {
