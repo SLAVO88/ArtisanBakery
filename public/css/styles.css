@@ -524,7 +524,7 @@ footer {
 }
 
 /* On smaller screens, where height is less than 450px, the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
+@media screen and (max-width: 450px) {
     .sidenav {
         padding-top: 15px;
         left: 0;
@@ -534,12 +534,17 @@ footer {
         font-size: 18px;
     }
 
-    .cart-total-title {
-        font-weight: bold;
-        font-size: 1.5em;
-        color:black;
-        margin-right: 1px;
-        margin-top: 10px;
+    .cart-quantity-input {
+        height: 28px;
+        width: 45px;
+        border-radius:5px;
+        border: 1px solid #56CCF2;
+        background-color: #eee;
+        color: #333;
+        padding: 0;
+        text-align: center;
+        font-size: 1.2em;
+        margin-right:2px;
     }
 
     /* Turn off parallax scrolling for tablets and phones */
