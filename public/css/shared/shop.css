@@ -62,7 +62,9 @@
 .cart-item {
     width: 45%;
     display:flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: left;
+    margin-left: 0.1em;
 }
 .cart-price {
     width: 20%;
@@ -78,12 +80,13 @@
 }
 .cart-item-title {
     color: #333;
-    margin-left: 0.5em;
-    font-size: 1.2em;
+    margin-left: 0;
+    font-size: 1.2rem;
 }
 
 .cart-item-image{
-    width: 75px;
+    margin-top: 0.1em;
+    width: 100px;
     height:auto;
     border-radius: 10px;
     
@@ -116,6 +119,7 @@
 
 .cart-row:last-child {
     border-bottom: 1px solid black;
+    
 
 }
 
@@ -132,8 +136,7 @@
     font-weight: bold;
     font-size: 1.5em;
     color:black;
-    margin-right: 10px;
-    margin-top: 10px;
+   
 }
 
 .cart-total-price {

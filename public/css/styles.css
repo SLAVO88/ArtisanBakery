@@ -487,12 +487,12 @@ footer {
     body {
         margin: 0px 0px;
     }
-    .cart-items{
+    /* .cart-items{
         margin:auto 50px;
-    }
-    .cart-total{
+    } */
+    /* .cart-total{
         margin:auto 50px;
-    }
+    } */
     .article-win {
 
         padding: 2px 150px 5px 150px;
@@ -509,17 +509,35 @@ footer {
     .welcome div {
         padding: 40px 10px;
     }
-
+    .cart-item {
+        
+        margin-left: 0.4em;
+    
+    }
+    .cart{
+        margin:auto 50px;
+    }
 }
 
-@media only screen and (min-width: 1000px) {
+@media only screen and (min-width: 1080px) {
     
-    .cart-items{
-        margin:auto 200px;
+    .cart{
+        margin:auto 150px;
     }
-    .cart-total{
-        margin:auto 200px;
+    .cart-item {
+        
+        margin-left: 0.8em;
+        flex-direction: row;
+        justify-content: left;
+        
+        
     }
+    .cart-item-title {
+        margin-left: 0.5em;
+    }
+    /* .cart-total{
+        margin:auto 200px;
+    } */
     
 }
 
@@ -546,6 +564,12 @@ footer {
         width: 40px;
         margin-right:2px;
    
+    }
+    .cart-item {
+        display:inline-flex;
+    }
+    .cart-item-title {
+        line-height: 1.1em;
     }
 
     /* Turn off parallax scrolling for tablets and phones */
