@@ -205,7 +205,7 @@ footer {
 
 
 
-[class*="imagePar"] {
+[class*="image-about"] {
     display: block;
     height: 300px;
     width: 100%;
@@ -219,23 +219,23 @@ footer {
     justify-content: center;
 }
 
-.imagePar1 {
+.image-about1 {
     background-image: url("../images/shop.png");
     float: right;
 }
 
-.imagePar2 {
+.image-about2 {
     background-image: url("../images/cookies.jpg");
     float: right;
 }
 
-.imagePar3 {
+.image-about3 {
     background-image: url("../images/baker1.png");
 
     float: left;
 }
 
-.imagePar2::after {
+.image-about2::after {
     content: "";
     clear: both;
     display: table;
@@ -479,7 +479,7 @@ footer {
 
 
 @media only screen and (min-width: 768px) {
-    [class*="imagePar"] {
+    [class*="image-about"] {
         width: 50%;
         margin: 0px 15px;
     }

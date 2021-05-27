@@ -1,3 +1,5 @@
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
@@ -13,7 +15,7 @@ const expressLayouts = require('express-ejs-layouts')
 const path = require('path')
 
 const mongoose = require('mongoose')
-
+const stripe = require('stripe')(stripeSecretKey)
 
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 
