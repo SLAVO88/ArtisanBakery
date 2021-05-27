@@ -15,56 +15,32 @@
     
             <h2 class="section-header"> Products: </h2>
             <div class="shop-items">
-                <div class="shop-item">
-                    <span class="shop-item-title">Bread</span>
-                    <img class="shop-item-image" src="http://source.unsplash.com/400x400?bread">
+                <% items.pastry.forEach(function(item){ %> 
+                    
+            
+                <div class="shop-item" data-item-id="<% item.id %>">
+                    <span class="shop-item-title"><%= item.name %></span>
+                    <img class="shop-item-image" src="<%= item.imgName %>">
                     <div class="shop-item-details">
-                        <span class="shop-item-price">£1.00</span>
+                        <span class="shop-item-price">£<%= item.price / 100 %></span>
                         <button type="button" class="btn btn-primary shop-item-button">Add to Cart</button>
                     </div>
                 </div>
-                <div class="shop-item">
-                    <span class="shop-item-title">Donut</span>
-                    <img class="shop-item-image" src="http://source.unsplash.com/400x400?donuts">
-                    <div class="shop-item-details">
-                        <span class="shop-item-price">£0.50</span>
-                        <button type="button" class="btn btn-primary shop-item-button">Add to Cart</button>
+                <% }) %>
+                <% items.breads.forEach(function(item){ %> 
+                    
+            
+                    <div class="shop-item" data-item-id="<% item.id %>">
+                        <span class="shop-item-title"><%= item.name %></span>
+                        <img class="shop-item-image" src="<%= item.imgName %>">
+                        <div class="shop-item-details">
+                            <span class="shop-item-price">£<%= item.price / 100 %></span>
+                            <button type="button" class="btn btn-primary shop-item-button">Add to Cart</button>
+                        </div>
                     </div>
+                    <% }) %>
                 </div>
-                <div class="shop-item">
-                    <span class="shop-item-title">Sourdough</span>
-                    <img class="shop-item-image" src="http://source.unsplash.com/400x400?sourdough">
-                    <div class="shop-item-details">
-                        <span class="shop-item-price">£2.00</span>
-                        <button type="button" class="btn btn-primary shop-item-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="shop-item">
-                    <span class="shop-item-title">Cookie</span>
-                    <img class="shop-item-image" src="http://source.unsplash.com/400x400?cookies">
-                    <div class="shop-item-details">
-                        <span class="shop-item-price">£0.70</span>
-                        <button type="button" class="btn btn-primary shop-item-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="shop-item">
-                    <span class="shop-item-title">Best of</span>
-                    <img class="shop-item-image" src="http://source.unsplash.com/400x400?bakery">
-                    <div class="shop-item-details">
-                        <span class="shop-item-price">£3.00</span>
-                        <button type="button" class="btn btn-primary shop-item-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="shop-item">
-                    <span class="shop-item-title">Buns</span>
-                    <img class="shop-item-image" src="http://source.unsplash.com/400x400?buns">
-                    <div class="shop-item-details">
-                        <span class="shop-item-price">£1.50</span>
-                        <button type="button" class="btn btn-primary shop-item-button">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-                
+                <br>
             <!--Cart-->
             <div class="cart">
                 <div class="cart-row">
