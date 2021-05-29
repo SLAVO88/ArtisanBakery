@@ -17,3 +17,50 @@
 .btn-primary:hover{
     background-color: #2D9CDB;
 }
+
+.user-welcome {
+    position:relative;
+
+    display: inline-block;
+    align-items: flex-end;
+    
+    height: auto;
+    color: #ffbf00;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 0.6em;
+    outline: none;   
+}
+.login-btn {
+    margin-top: 0.8em;
+    position:relative;
+    display: inline-block;
+    flex-direction: row;
+    width: 60px;
+    height: 30px;
+   
+    text-align: center;
+    
+    color: #ffbf00;
+    font-size: 15px;
+    font-size: large;
+    cursor: pointer;
+    nav-right: 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid #ffbf00;
+    background: transparent;
+    outline: none;
+    margin-right: 10px;
+
+}
+
+.login-btn:hover {
+
+
+    color: black;
+    border: 1px solid #ffbf00;
+    background: #ffe200;
+    outline: 0;
+}

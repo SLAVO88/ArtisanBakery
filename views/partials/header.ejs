@@ -1,4 +1,7 @@
 <header class="header">
+     <!-- Ham Menu -->
+
+     <i class="fa fa-bars fa-2x menu-ham" onclick="openNav()"></i>
  
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -9,19 +12,33 @@
         <a id="contactLinkHl" href="contact">Contact</a>
     </div>
 
-    <!-- Ham Menu -->
-
-    <i class="fa fa-bars fa-2x menu-ham" onclick="openNav()"></i>
-
-    <a href="index.html" class="home-btn">Home</a>
+   
+    
+    
     <!-- Nav Soc -->
+    
     <div class="nav-right">
-        <ul style="list-style:none;">
-            <li class="button"><a href="email@artisanbakery.rf.gd"><img src="images/icons/email.svg"></a></li>
-            <li class="button"><a href="http://www.facebook.com/"><img src="images/icons/fb.svg"></a></li>
-            <li class="button"><a href="http://www.instagram.com/"><img src="images/icons/inst.svg"></a></li>
+        <div class="nav-right login">
+            <% if (userName !== "") {%>
+                <a href="user"><span class="user-welcome"><%=userName%></span></a>
+            <%}%>     
+            <a href="login"><button class="btn login-btn">Login</button></a>
+             
+        </div>
+        <div>
+       
+            <ul style="list-style:none; padding-left: 0px;">
+            
+                
+            
+                <li class="button"><a href="email@artisanbakery.rf.gd"><img src="images/icons/email.svg"></a></li>
+                <li class="button"><a href="http://www.facebook.com/"><img src="images/icons/fb.svg"></a></li>
+                <li class="button"><a href="http://www.instagram.com/"><img src="images/icons/inst.svg"></a></li>
 
-        </ul>
-
+            </ul>
+            <a href="index" class="home-btn">Home</a>
+        </div>
     </div>
+    
+    
 </header>

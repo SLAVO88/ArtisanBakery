@@ -17,9 +17,9 @@ html {
 
 .header {
     display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    align-content: space-around;
+    /* flex-wrap: nowrap; */
+    flex-direction:row;
+    justify-content: flex-end;
     margin: 0px 0px;
     height: 15vh;
     min-height: 80px;
@@ -31,6 +31,8 @@ html {
 
 .menu-ham {
     position: fixed;
+    left: 2vw;
+    justify-self: flex-start;
     align-self: flex-start;
     z-index: 1;
     color: #ffbf00;
@@ -52,11 +54,17 @@ html {
 
 /*<span class= "menu-ham" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span> */
 .nav-right {
+    display:inline-flex;
+    justify-content: baseline;
+    /* width: 400px; */
+    /* flex-direction: row;
+    align-content: flex-end; */
     margin-right: 2vw;
 }
 
 .home-btn {
     position: absolute;
+    display: flex;
     bottom: 1vh;
     text-align: center;
     height: auto;
@@ -84,8 +92,8 @@ html {
     height: 22px;
     padding: 0;
     border-radius: 3px;
-    float: right;
-    margin-top: 2px;
+    /* float: right; */
+    margin-top: 2px;     
     font-size: 0px;
     cursor: pointer;
     outline: 0;

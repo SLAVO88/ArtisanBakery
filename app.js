@@ -1,5 +1,6 @@
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
@@ -23,14 +24,18 @@ const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connected to Mongoose'))
 
- 
+
 const indexRouter = require('./routes/index')
 app.set('view engine', 'ejs')
 app.set(path.join('views', __dirname, 'views'))
 app.set('layout', 'layouts/layout')
+
 app.use(expressLayouts)
 app.use(express.static('public'))
 app.use(express.json())
+
+
+
 app.use('/', indexRouter)
 
 
