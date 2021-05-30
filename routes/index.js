@@ -1,36 +1,102 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 
 
+
 const express = require('express')
-const router = express()
+const router = express.Router()
 const fs = require('fs')
+const bcrypt = require('bcrypt')
+const passport = require('passport')
+const flash = require('express-flash')
+const session = require('express-session')
+const initializePassport = require('../passport-config')
+const methodOverride = require('method-override')
+
+
+
+initializePassport(
+    passport,
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id)
+)
 
 const stripe = require('stripe')(stripeSecretKey)
-
-
+const users = []
+router.use(express.json())
+router.use(express.urlencoded({extended:false}))
+router.use(flash())
+router.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+router.use(passport.initialize())
+router.use(passport.session())
+router.use(methodOverride('_method'))
 
 router.get('*', (req, res, next) => { 
-    router.locals.userName = "UserXXX"
+    if (req.isAuthenticated()){
+        
+        res.locals.userName = req.user.name
+        
+        } else {
+        res.locals.userName = ""
+        }
+    
     next()
 })
 router.get('/', (req, res) => { 
+    
 res.render('index') 
 })
-router.get('/login', (req, res) => { 
+router.get('/login', checkNotAuthenticated, (req, res) => { 
     res.render('login')
         
 })
-router.get('/register', (req, res) => { 
+router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+    successRedirect: '/', 
+    failureRedirect: '/login',
+    failureFlash: true
+}))
+
+router.get('/logout', checkAuthenticated, (req, res) => {
+  res.render('logout')
+})   
+router.delete('/logoutuser', (req, res) => {
+    req.logout()
+    res.redirect('/login')
+})   
+
+router.get('/register', checkNotAuthenticated, (req, res) => { 
     res.render('register')
         
 })
-router.post('/register', (req, res) => { 
-    res.render('register')
+router.post('/register', checkNotAuthenticated, async (req, res) => { 
+    try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        users.push({
+            id: Date.now().toString(),
+            name: req.body.name,
+            email: req.body.email,
+            password: hashedPassword
+        })
+        res.redirect('/login')   
+        
+    }
+    catch{
+        res.redirect('login')
+
+    }
+    
+    console.log(users)
         
 }) 
    
-router.get('/user', (req, res) => { 
+router.get('/user', checkAuthenticated, (req, res) => { 
     res.render('user')
         
 })
@@ -87,10 +153,24 @@ router.post('/purchase', (req, res) => {
             
 })
 
-// router.get('/css', (req, res) => {
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()){
+        return next()
+    }
+    res.redirect('/login')
+}
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()){
+        return res.redirect('/logout')
+    }
+     next()
+}
+
+router.get('/css', (req, res) => {
     
-//     res.send('no permition')
-// })
+    res.send('no permission')
+})
 
 
 module.exports = router

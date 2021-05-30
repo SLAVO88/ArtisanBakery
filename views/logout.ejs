@@ -7,11 +7,19 @@
 
         <b>Artisan Bakery</b> - the company bringing that <b>great change</b> to you.
         <hr style="width:70%;">
-        <br><br>
+    
 
-        <% if (userName !== "") {%>
-            <a href="user"><span class="user-welcome"><h1>Loged in as: <%=userName%></h1></span></a>
-        <%}%>  
+<h1>Loged in as <%= userName %></h1>
+
+<h1>Log out</h1>
+
+<form action="/logoutuser?_method=DELETE" method="POST">
+   
+  
+    <button class="btn btn-primary btn-danger" type="submit">Log out</button>
+</form>
+
+
 
 
 
