@@ -10,12 +10,27 @@ const express = require('express')
 const router = express.Router()
 const fs = require('fs')
 const bcrypt = require('bcrypt')
-const passport = require('passport')
-const flash = require('express-flash')
 const session = require('express-session')
+const passport = require('passport')
+
+const flash = require('express-flash')
+const MongoStore = require('connect-mongo')
+router.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
+    cookie: {maxAge: 10 * 60 * 1000}
+}))
+router.use(flash())
+router.use(passport.initialize())
+router.use(passport.session())
+
+
 const initializePassport = require('../passport-config')
 const methodOverride = require('method-override')
 const ejs = require('ejs')
+const { Router } = require('express')
 
 
 
@@ -24,14 +39,7 @@ const stripe = require('stripe')(stripeSecretKey)
 
 router.use(express.json())
 router.use(express.urlencoded({extended:false}))
-router.use(flash())
-router.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}))
-router.use(passport.initialize())
-router.use(passport.session())
+
 router.use(methodOverride('_method'))
 
 router.get('*', (req, res, next) => { 
@@ -73,7 +81,7 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
 })
 router.post('/register', checkNotAuthenticated, passport.authenticate('local.signup',{
     successRedirect: '/', 
-    failureRedirect: '/register',
+    failureRedirect: '/register',  
     failureFlash: true
 })
 

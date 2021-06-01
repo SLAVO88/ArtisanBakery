@@ -9,10 +9,20 @@ const fs = require('fs')
 
 
 const express = require('express')
-const app = express()
+
 const indexRouter = require('./routes/index')
 const expressLayouts = require('express-ejs-layouts')
 const path = require('path')
+const mongoose = require('mongoose')
+const session = require('express-session')
+const passport = require('passport')
+const flash = require('express-flash')
+const stripe = require('stripe')(stripeSecretKey)
+const MongoStore = require('connect-mongo')
+const app = express()
+
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(expressLayouts)
@@ -23,11 +33,24 @@ app.use('/', indexRouter)
 // const http = require('http') //comment when deploying
 // const reload = require('reload') //comment when deploying
 
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
+    cookie: {maxAge: 10 * 60 * 1000}
+}))
+app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(function(req,res,next){
+    res.locals.session = req.session
+    next()
+})
 
-const mongoose = require('mongoose')
-const stripe = require('stripe')(stripeSecretKey)
 
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+
+
 
 const db = mongoose.connection
 db.on('error', error => console.error(error))
