@@ -33,7 +33,7 @@ let stripeHendler = StripeCheckout.configure({
     locale: 'auto',
     token: function(token){
         var items = []
-        var cartItemConteiner = document.getElementsByClassName('cart-items')[0]
+        var cartItemContainer = document.getElementsByClassName('cart-items')[0]
         var cartRows = cartItemContainer.getElementsByClassName('cart-row')
         for (i = 0; i < cartRows.length; i++) {
         var cartRow = cartRows[i]

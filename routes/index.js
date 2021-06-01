@@ -15,17 +15,21 @@ const flash = require('express-flash')
 const session = require('express-session')
 const initializePassport = require('../passport-config')
 const methodOverride = require('method-override')
+const ejs = require('ejs')
+
+const mongoose = require('mongoose')
 
 
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 
-initializePassport(
-    passport,
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
-)
+const db = mongoose.connection
+db.on('error', error => console.error(error))
+db.once('open', () => console.log('Connected to Mongoose'))
+
+
 
 const stripe = require('stripe')(stripeSecretKey)
-const users = []
+
 router.use(express.json())
 router.use(express.urlencoded({extended:false}))
 router.use(flash())
@@ -57,7 +61,7 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login')
         
 })
-router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+router.post('/login', checkNotAuthenticated, passport.authenticate('login', {
     successRedirect: '/', 
     failureRedirect: '/login',
     failureFlash: true
@@ -75,26 +79,16 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register')
         
 })
-router.post('/register', checkNotAuthenticated, async (req, res) => { 
-    try{
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        users.push({
-            id: Date.now().toString(),
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword
-        })
-        res.redirect('/login')   
-        
-    }
-    catch{
-        res.redirect('login')
+router.post('/register', checkNotAuthenticated, passport.authenticate('local.signup',{
+    successRedirect: '/', 
+    failureRedirect: '/register',
+    failureFlash: true
+})
 
-    }
     
-    console.log(users)
+    
         
-}) 
+) 
    
 router.get('/user', checkAuthenticated, (req, res) => { 
     res.render('user')
