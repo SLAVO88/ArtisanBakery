@@ -17,14 +17,6 @@ const initializePassport = require('../passport-config')
 const methodOverride = require('method-override')
 const ejs = require('ejs')
 
-const mongoose = require('mongoose')
-
-
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
-
-const db = mongoose.connection
-db.on('error', error => console.error(error))
-db.once('open', () => console.log('Connected to Mongoose'))
 
 
 
