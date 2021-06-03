@@ -165,7 +165,7 @@ router.post('/purchase', (req, res) => {
     
             
 })
-router.get ('/loadcart', (req, res) => {
+router.get ('/loadcart', (req, res, next) => {
     if (req.isAuthenticated()){
        
         Cart.findOne({'userId': req.user.email},  function(err, cart){
@@ -175,9 +175,12 @@ router.get ('/loadcart', (req, res) => {
             console.log(cart)
             if (cart) {
                 console.log(cart.items)
-                var cartItemsNb = cart.items.length
+                cartItemsNb = cart.items.length
+                
                 req.session.cartItemsNumb
+                
                 res.json({items: cart.items})
+                
                 
                 
                
@@ -198,7 +201,7 @@ router.get('/cart', (req, res) => {
     res.render('shop/cart')
         
 })
-router.post('/cart', (req, res) => {
+router.post('/cart', (req, res, next) => {
     
    
     console.log(req.body.items)
@@ -210,10 +213,12 @@ router.post('/cart', (req, res) => {
         })
         Cart.findOne({userId: req.user.email}, function(err, cart) {
             
-            
+            var cartItemsNb = newCart.items.length
             if (cart) {
                 cart.remove()
-              
+                
+                
+                
                 newCart.save(function(e, result){
                     if (e) {
                         console.log(e)
@@ -226,14 +231,19 @@ router.post('/cart', (req, res) => {
                     if (e) {
                         console.log(e)
                     } else {
+                        
+                
+                
                         console.log("saved successfully")
                     }
                 }) 
             } 
         })
-        
+        req .session.cartItemsNb
         }
+    
     res.json({items: req.body.items})
+    
 })
     
 function checkAuthenticated(req, res, next) {

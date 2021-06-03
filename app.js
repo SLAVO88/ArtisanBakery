@@ -34,20 +34,20 @@ app.use('/', indexRouter)
 // const http = require('http') //comment when deploying
 // const reload = require('reload') //comment when deploying
 
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
-    cookie: {maxAge: 10 * 60 * 1000}
-}))
+// app.use(session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
+//     cookie: {maxAge: 10 * 60 * 1000}
+// }))
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(function(req,res,next){
-    res.locals.session = req.session
-    next()
-})
+// app.use(function(req,res,next){
+//     res.locals.session = req.session
+//     next()
+// })
 
 
 
