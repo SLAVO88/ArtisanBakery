@@ -23,10 +23,11 @@ const app = express()
 
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 
-app.use(express.json())
-app.use(express.urlencoded({extended:false}))
+
 app.use(expressLayouts)
 app.use(express.static('public'))
+app.use(express.json())
+app.use(express.urlencoded({extended:false}))
 app.use('/', indexRouter)
 
 

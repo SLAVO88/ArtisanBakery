@@ -1,12 +1,14 @@
 
-  
+
 if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
 } else {
     ready()
+    
 }
 
 function ready() {
+    
     var removeCartItemButtons = document.getElementsByClassName('btn-danger')
     for (var i = 0; i < removeCartItemButtons.length; i++) {
         var button = removeCartItemButtons[i]
@@ -103,8 +105,67 @@ function addToCartClicked(event) {
     var price = shopItem.getElementsByClassName('shop-item-price')[0].innerText
     var imageSrc = shopItem.getElementsByClassName('shop-item-image')[0].src
     var id = shopItem.dataset.itemId
-    addItemToCart(title, price, imageSrc, id)
+   
+    
+     //i can DELETE ADD ITEM TO CART TOTAL LATER  HERE SO THERE IS NO RECURSIVE OF IT IN ANOTHER
+    usersCart(title, price, imageSrc, id)
+    // addItemToCart(title, price, imageSrc, id)
     updateCartTotal()
+    
+}
+
+function usersCart(title, price, imageSrc, id){
+    addItemToCart(title, price, imageSrc, id)
+    var items = []
+
+    var cartItemContainer = document.getElementsByClassName('cart-items')[0]
+    var cartRows = cartItemContainer.getElementsByClassName('cart-row')
+    for (i = 0; i < cartRows.length; i++) {
+    var cartRow = cartRows[i]
+    var title = cartRow.getElementsByClassName('cart-item-title')[0].innerText
+    var price = cartRow.getElementsByClassName('cart-price')[0].innerText
+    var imageSrc = cartRow.getElementsByClassName('cart-item-image')[0].src
+    var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
+    var quantity = quantityElement.value
+    var id = cartRow.dataset.itemId
+    items.push({
+        id:this.id,
+        quantity:this.quantity,
+        title: title,
+        price: price,
+        imageSrc: imageSrc
+    })
+    }
+    // items2.push({items: items})
+    fetch('/cart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            items: items
+
+        })
+        }).then(res => {
+            return res.json()
+        }).then(data => {
+            var cartItems = document.getElementsByClassName('cart-items')[0]
+            while (cartItems.hasChildNodes()) {
+                cartItems.removeChild(cartItems.firstChild)
+            }   
+            data.items.forEach(function(item){
+                
+                addItemToCart(item.title, item.price, item.imageSrc, item.id)
+                
+            })  
+            console.log(data)
+        }
+        ).catch(function(error){
+            console.error(error)
+            })
+        
+
 }
 
 function addItemToCart(title, price, imageSrc, id) {
@@ -150,3 +211,4 @@ function updateCartTotal() {
     total = Math.round(total * 100) / 100
     document.getElementsByClassName('cart-total-price')[0].innerText = '£' + total
 }
+

@@ -14,6 +14,12 @@ const session = require('express-session')
 const passport = require('passport')
 
 const flash = require('express-flash')
+
+const mongoose = require('mongoose')
+
+
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+
 const MongoStore = require('connect-mongo')
 router.use(session({
     secret: process.env.SESSION_SECRET,
@@ -36,7 +42,7 @@ const { Router } = require('express')
 
 
 const stripe = require('stripe')(stripeSecretKey)
-
+const Cart = require('../models/cart')
 router.use(express.json())
 router.use(express.urlencoded({extended:false}))
 
@@ -50,7 +56,6 @@ router.get('*', (req, res, next) => {
         } else {
         res.locals.userName = ""
         }
-    
     next()
 })
 router.get('/', (req, res) => { 
@@ -146,7 +151,64 @@ router.post('/purchase', (req, res) => {
     
             
 })
+router.get ('/loadcart', (req, res) => {
+    if (req.isAuthenticated()){
+       
+        Cart.findOne({'userId': req.user.email},  function(err, cart){
+           
+            console.log(req.user.email)
+            
+            console.log(cart)
+            if (cart) {
+                console.log(cart.items)
+               
+                res.json({items: cart.items})
+            } else {
+                res.json({cartNotEmpty: false})
+            }
+            
+        })
+        
+    } else {
 
+    }
+    
+
+})
+
+router.get('/cart', (req, res) => { 
+    res.render('shop/cart')
+        
+})
+router.post('/cart', (req, res) => {
+    
+   
+    console.log(req.body.items)
+    
+   if (req.isAuthenticated()){
+    
+        Cart.findOne({userId: req.user.email}, function(err, cart) {
+            var newCart = new Cart({
+                userId: req.user.email,
+                items: req.body.items
+                })
+            
+            if (cart) {
+                cart.remove()
+                newCart.save(function(e, result){
+                    if (e) {
+                        console.log(e)
+                    } else {
+                        console.log("saved successfully")
+                    }
+                }) 
+            }  
+        })
+        
+        }
+    res.json({items: req.body.items})
+})
+    
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()){
         return next()
