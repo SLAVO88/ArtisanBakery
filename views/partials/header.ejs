@@ -21,14 +21,21 @@
         <div class="nav-right login">
             <% if (userName !== "") {%>
                 <a href="user"><span class="user-welcome"><%=userName%></span></a>
-            <%}%>     
+            <%}%>  
+            <div class="menu-cart">  
             <a href="login"><button class="btn login-btn">Login</button></a>
              
-        </div>
+        
+        <div>
+<a href ="/cart"><button class="badge-btn"> <img src="images/icons/cart-ico.svg" class="cart-icon"><span class="badge"><% if (cartItemsNb !== "") {%><%= cartItemsNb %><%}%>X</span></button></a>
+
+        </div> 
+    </div>
+    </div> 
         <div>
        
             <ul style="list-style:none; padding-left: 0px;">
-            
+                
                 
             
                 <li class="button"><a href="email@artisanbakery.rf.gd"><img src="images/icons/email.svg"></a></li>
@@ -36,6 +43,7 @@
                 <li class="button"><a href="http://www.instagram.com/"><img src="images/icons/inst.svg"></a></li>
 
             </ul>
+            
             <a href="index" class="home-btn">Home</a>
         </div>
     </div>

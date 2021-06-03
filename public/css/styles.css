@@ -566,7 +566,14 @@ footer {
         margin-right: 0.1em;
        
     }
-
+    .cart-icon{
+        top: 18px;
+        margin-top: 1px;
+    }
+    .badge.btn{
+        top: 18px;
+        margin-top: 1px;
+    }
     .cart-quantity-input {
   
         width: 40px;
@@ -590,11 +597,15 @@ footer {
 
 
 @media(hover:hover) {
-    .button:hover {
+    .button:hover, .cart-icon:hover{
         transform: scale(1.2);
 
         background-color: #ffe200;
 
         /*border: 1px;*/
+    }
+    .badge-btn:hover{
+        background-color: transparent;
+        
     }
 }

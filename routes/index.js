@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
-
+global.cartItemsNb = ""
 
 
 const express = require('express')
@@ -43,18 +43,30 @@ const { Router } = require('express')
 
 const stripe = require('stripe')(stripeSecretKey)
 const Cart = require('../models/cart')
+const { SSL_OP_TLS_BLOCK_PADDING_BUG } = require('constants')
 router.use(express.json())
 router.use(express.urlencoded({extended:false}))
 
-router.use(methodOverride('_method'))
-
+router.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
+    cookie: {maxAge: 10 * 60 * 1000}
+}))
+router.use(function(req,res,next){
+    res.locals.session = req.session
+    next()
+})
 router.get('*', (req, res, next) => { 
     if (req.isAuthenticated()){
         
         res.locals.userName = req.user.name
         
+       
         } else {
         res.locals.userName = ""
+       
         }
     next()
 })
@@ -163,8 +175,12 @@ router.get ('/loadcart', (req, res) => {
             console.log(cart)
             if (cart) {
                 console.log(cart.items)
-               
+                var cartItemsNb = cart.items.length
+                req.session.cartItemsNumb
                 res.json({items: cart.items})
+                
+                
+               
             } else {
                 res.json({cartNotEmpty: false})
             }
@@ -197,6 +213,7 @@ router.post('/cart', (req, res) => {
             
             if (cart) {
                 cart.remove()
+              
                 newCart.save(function(e, result){
                     if (e) {
                         console.log(e)
