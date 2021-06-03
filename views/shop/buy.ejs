@@ -24,7 +24,7 @@
                 <% items.pastry.forEach(function(item){ %> 
                     
             
-                <div class="shop-item" data-item-id="<% item.id %>">
+                <div class="shop-item" data-item-id="<%= item.id %>">
                     <span class="shop-item-title"><%= item.name %></span>
                     <img class="shop-item-image" src="<%= item.imgName %>">
                     <div class="shop-item-details">
@@ -36,7 +36,7 @@
                 <% items.breads.forEach(function(item){ %> 
                     
             
-                    <div class="shop-item" data-item-id="<% item.id %>">
+                    <div class="shop-item" data-item-id="<%= item.id %>">
                         <span class="shop-item-title"><%= item.name %></span>
                         <img class="shop-item-image" src="<%= item.imgName %>">
                         <div class="shop-item-details">

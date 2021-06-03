@@ -64,7 +64,7 @@ function quantityChanged(event) {
     updateCartTotal()
 }
 
-function addItemToCart(title, price, imageSrc, id) {
+function addItemToCart() {
     var cartRow = document.createElement('div')
     cartRow.classList.add('cart-row')
     var cartItems = document.getElementsByClassName('cart-items')[0]

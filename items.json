@@ -1,25 +1,25 @@
 {
     "pastry": [
         {
-        "id":1,
+        "id":"1",
         "name": "Cupcake",
         "price": 100,
         "imgName": "http://source.unsplash.com/400x400?cupcakes"
         },
         {
-        "id":2,
+        "id":"2",
         "name": "Buns",
         "price": 150,
         "imgName": "http://source.unsplash.com/400x400?buns"
         },
         {
-        "id":3,
+        "id":"3",
         "name": "Cookie",
         "price": 75,
         "imgName": "http://source.unsplash.com/400x400?cookies"
         },
         {
-        "id":4,
+        "id":"4",
         "name": "Best Of",
         "price": 300,
         "imgName": "http://source.unsplash.com/400x400?bakery"
@@ -27,13 +27,13 @@
     ],
     "breads": [
         {
-            "id":5,
+            "id":"5",
             "name": "Sourdough",
             "price": 200,
             "imgName": "http://source.unsplash.com/400x400?sourdough"
         },
         {
-            "id":6,
+            "id":"6",
             "name": "Bread",
             "price": 130,
             "imgName": "http://source.unsplash.com/400x400?bread"

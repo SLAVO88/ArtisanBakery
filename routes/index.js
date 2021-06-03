@@ -114,6 +114,7 @@ router.get('/shop', (req, res) => {
                 stripePublicKey: stripePublicKey,
                 items : JSON.parse(data)
             })
+            
         }
     })
     
@@ -127,9 +128,10 @@ router.post('/purchase', (req, res) => {
         } else {
            const itemsJson = JSON.parse(data)
            const itemsArray = itemJson.pastry.concat(itemsJson.breads)
-           let total = 0 
+           var total = 0 
            req.body.items.forEach(function(item){
                const itemJson = itemsArray.find(function(i) {
+                    
                    return i.id == item.id
                    total = total + itemJson.price * item.quantity
                })
@@ -186,12 +188,12 @@ router.post('/cart', (req, res) => {
     console.log(req.body.items)
     
    if (req.isAuthenticated()){
-    
+    var newCart = new Cart({
+        userId: req.user.email,
+        items: req.body.items
+        })
         Cart.findOne({userId: req.user.email}, function(err, cart) {
-            var newCart = new Cart({
-                userId: req.user.email,
-                items: req.body.items
-                })
+            
             
             if (cart) {
                 cart.remove()
@@ -202,7 +204,15 @@ router.post('/cart', (req, res) => {
                         console.log("saved successfully")
                     }
                 }) 
-            }  
+            } else {
+                newCart.save(function(e, result){
+                    if (e) {
+                        console.log(e)
+                    } else {
+                        console.log("saved successfully")
+                    }
+                }) 
+            } 
         })
         
         }

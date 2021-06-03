@@ -8,7 +8,9 @@ if (document.readyState == 'loading') {
 }
 
 function ready() {
-    
+
+    loadCart()
+        
     var removeCartItemButtons = document.getElementsByClassName('btn-danger')
     for (var i = 0; i < removeCartItemButtons.length; i++) {
         var button = removeCartItemButtons[i]
@@ -66,6 +68,7 @@ let stripeHendler = StripeCheckout.configure({
                 cartItems.removeChild(cartItems.firstChild)
                 }
                 updateCartTotal()
+                usersCart()
                 }).catch(function(error){
                     console.error(error)
                     })
@@ -82,13 +85,45 @@ function purchaseClicked() {
     stripeHendler.open({
         amount: price
     })
+  
 }
 
 function removeCartItem(event) {
     var buttonClicked = event.target
     buttonClicked.parentElement.parentElement.remove()
     updateCartTotal()
+    usersCart()
 }
+
+function addItemToCart(title, price, imageSrc, id, quantity=1) {
+    var cartRow = document.createElement('div')
+    cartRow.classList.add('cart-row')
+    var cartItems = document.getElementsByClassName('cart-items')[0]
+    cartRow.dataset.itemId = id
+    var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
+    
+    for (var i = 0; i < cartItemNames.length; i++) {
+        if (cartItemNames[i].innerText == title) {
+            alert('This item is already added to the cart')
+            return
+        }
+    }
+    var cartRowContents = `
+        <div class="cart-item cart-column">
+            <img class="cart-item-image" src="${imageSrc}">
+            <span class="cart-item-title">${title}</span>
+        </div>
+        <span class="cart-price cart-column">${price}</span>
+        <div class="cart-quantity cart-column">
+            <input class="cart-quantity-input" type="number" value="${quantity}">
+            <button class="btn btn-danger" type="button">Remove</button>
+        </div>`
+    cartRow.innerHTML = cartRowContents
+    cartItems.append(cartRow)
+    cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeCartItem)
+    cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged)
+}
+
 
 function quantityChanged(event) {
     var input = event.target
@@ -96,6 +131,7 @@ function quantityChanged(event) {
         input.value = 1
     }
     updateCartTotal()
+    usersCart()
 }
 
 function addToCartClicked(event) {
@@ -105,17 +141,20 @@ function addToCartClicked(event) {
     var price = shopItem.getElementsByClassName('shop-item-price')[0].innerText
     var imageSrc = shopItem.getElementsByClassName('shop-item-image')[0].src
     var id = shopItem.dataset.itemId
+    
    
     
      //i can DELETE ADD ITEM TO CART TOTAL LATER  HERE SO THERE IS NO RECURSIVE OF IT IN ANOTHER
-    usersCart(title, price, imageSrc, id)
+     addItemToCart(title, price, imageSrc, id, "1")
+    usersCart()
     // addItemToCart(title, price, imageSrc, id)
     updateCartTotal()
     
 }
 
-function usersCart(title, price, imageSrc, id){
-    addItemToCart(title, price, imageSrc, id)
+
+function usersCart(){
+    
     var items = []
 
     var cartItemContainer = document.getElementsByClassName('cart-items')[0]
@@ -129,8 +168,8 @@ function usersCart(title, price, imageSrc, id){
     var quantity = quantityElement.value
     var id = cartRow.dataset.itemId
     items.push({
-        id:this.id,
-        quantity:this.quantity,
+        productId: id,
+        quantity: quantity,
         title: title,
         price: price,
         imageSrc: imageSrc
@@ -156,7 +195,7 @@ function usersCart(title, price, imageSrc, id){
             }   
             data.items.forEach(function(item){
                 
-                addItemToCart(item.title, item.price, item.imageSrc, item.id)
+                addItemToCart(item.title, item.price, item.imageSrc, item.productId, item.quantity)
                 
             })  
             console.log(data)
@@ -166,34 +205,6 @@ function usersCart(title, price, imageSrc, id){
             })
         
 
-}
-
-function addItemToCart(title, price, imageSrc, id) {
-    var cartRow = document.createElement('div')
-    cartRow.classList.add('cart-row')
-    var cartItems = document.getElementsByClassName('cart-items')[0]
-    cartRow.dataset.itemId = id
-    var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
-    for (var i = 0; i < cartItemNames.length; i++) {
-        if (cartItemNames[i].innerText == title) {
-            alert('This item is already added to the cart')
-            return
-        }
-    }
-    var cartRowContents = `
-        <div class="cart-item cart-column">
-            <img class="cart-item-image" src="${imageSrc}">
-            <span class="cart-item-title">${title}</span>
-        </div>
-        <span class="cart-price cart-column">${price}</span>
-        <div class="cart-quantity cart-column">
-            <input class="cart-quantity-input" type="number" value="1">
-            <button class="btn btn-danger" type="button">Remove</button>
-        </div>`
-    cartRow.innerHTML = cartRowContents
-    cartItems.append(cartRow)
-    cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeCartItem)
-    cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged)
 }
 
 function updateCartTotal() {
@@ -212,3 +223,32 @@ function updateCartTotal() {
     document.getElementsByClassName('cart-total-price')[0].innerText = '£' + total
 }
 
+function loadCart() {
+    fetch('/loadcart')
+    .then(res => {
+        if (res.ok){
+            console.log("success")
+        } else {
+            console.log("not successful")
+        }
+        return res.json()
+    }).then(data => {
+        var cartItems = document.getElementsByClassName('cart-items')[0]
+        while (cartItems.hasChildNodes()) {
+            cartItems.removeChild(cartItems.firstChild)
+        } 
+        if (data){
+            data.items.forEach(function(item){
+                
+                addItemToCart(item.title, item.price, item.imageSrc, item.productId, item.quantity)
+                
+            })  
+        } else {
+            console.log('empty')
+        }
+        
+    }
+    ).catch(function(error){
+        console.error(error)
+        })
+}
