@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
-global.cartItemsNb = ""
+// global.cartItemsNb = ""
 
 
 const express = require('express')
@@ -24,50 +24,65 @@ const MongoStore = require('connect-mongo')
 router.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
     cookie: {maxAge: 10 * 60 * 1000}
 }))
 router.use(flash())
 router.use(passport.initialize())
 router.use(passport.session())
-
+router.use(function(req,res,next){
+    res.locals.session = req.session
+    next()
+})
 
 const initializePassport = require('../passport-config')
 const methodOverride = require('method-override')
 const ejs = require('ejs')
-const { Router } = require('express')
+
 
 
 
 
 const stripe = require('stripe')(stripeSecretKey)
 const Cart = require('../models/cart')
-const { SSL_OP_TLS_BLOCK_PADDING_BUG } = require('constants')
+
 router.use(express.json())
 router.use(express.urlencoded({extended:false}))
+router.use(methodOverride('_method'))
 
-router.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
-    cookie: {maxAge: 10 * 60 * 1000}
-}))
-router.use(function(req,res,next){
-    res.locals.session = req.session
-    next()
-})
+
 router.get('*', (req, res, next) => { 
+
+        if (typeof res.locals.cartQuantity === undefined){
+            
+       res.locals.cartQuantity = ""
+       console.log(typeof res.locals.cartQuantity)
+       
+        
+      
+        }else {
+            res.locals.cartQuantity = req.session.cartQuantity
+            console.log("fsdfs" + res.locals.cartQuantity)
+         
+           
+            
+        }
+
+
+  
+    
     if (req.isAuthenticated()){
         
         res.locals.userName = req.user.name
         
-       
-        } else {
-        res.locals.userName = ""
-       
-        }
+    
+    } else {
+    res.locals.userName = ""
+    
+    
+    
+    }
     next()
 })
 router.get('/', (req, res) => { 
@@ -124,7 +139,8 @@ router.get('/shop', (req, res) => {
            
             res.render('shop/buy', {
                 stripePublicKey: stripePublicKey,
-                items : JSON.parse(data)
+                items : JSON.parse(data),
+                cartItems : req.session.items
             })
             
         }
@@ -145,8 +161,9 @@ router.post('/purchase', (req, res) => {
                const itemJson = itemsArray.find(function(i) {
                     
                    return i.id == item.id
-                   total = total + itemJson.price * item.quantity
+                   
                })
+               total = total + itemJson.price * item.quantity
                stripe.charges.create({
                    amount:total,
                    sourcesource: req.body.stripeTokenid,
@@ -166,83 +183,90 @@ router.post('/purchase', (req, res) => {
             
 })
 router.get ('/loadcart', (req, res, next) => {
+    
     if (req.isAuthenticated()){
        
         Cart.findOne({'userId': req.user.email},  function(err, cart){
-           
+          
             console.log(req.user.email)
             
-            console.log(cart)
+            
             if (cart) {
-                console.log(cart.items)
-                cartItemsNb = cart.items.length
+                console.log('cart:' + cart.items)
                 
-                req.session.cartItemsNumb
+                 
+               
                 
                 res.json({items: cart.items})
-                
+
                 
                 
                
             } else {
-                res.json({cartNotEmpty: false})
+                // req.session.cartItemsNumb
+                res.json({})
+                
+                    
             }
             
         })
         
     } else {
-
-    }
     
-
+    res.json({items: req.session.items})
+    }
 })
 
 router.get('/cart', (req, res) => { 
-    res.render('shop/cart')
-        
+   
+    res.render('shop/cart', {
+        stripePublicKey: stripePublicKey,
+    
+        items : req.session.items
+    })
 })
 router.post('/cart', (req, res, next) => {
     
    
-    console.log(req.body.items)
+    
     
    if (req.isAuthenticated()){
     var newCart = new Cart({
         userId: req.user.email,
         items: req.body.items
         })
+    // cartItemsNb = newCart.items.length
         Cart.findOne({userId: req.user.email}, function(err, cart) {
             
-            var cartItemsNb = newCart.items.length
-            if (cart) {
+            
+            if (cart){
                 cart.remove()
-                
-                
-                
-                newCart.save(function(e, result){
-                    if (e) {
-                        console.log(e)
-                    } else {
-                        console.log("saved successfully")
-                    }
-                }) 
-            } else {
-                newCart.save(function(e, result){
-                    if (e) {
-                        console.log(e)
-                    } else {
-                        
-                
-                
-                        console.log("saved successfully")
-                    }
-                }) 
-            } 
+            }
+            
+            newCart.save(function(e, result){
+                if (e) {
+                    console.log(e)
+                } else {
+                    console.log("saved successfully")
+                }
+            })  
         })
-        req .session.cartItemsNb
-        }
+        
+    }
+    req.session.items = req.body.items
+
+
     
-    res.json({items: req.body.items})
+
+    // var itemsObjects = JSON.parse(res.locals.session.items)
+    // console.log(itemsObjects[quantity])
+    console.log(req.body.quantity)
+  
+    res.json({items: req.session.items})
+    req.session.cartQuantity = req.body.cartQuantity
+    req.session.save()
+
+    
     
 })
     
@@ -250,7 +274,7 @@ function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()){
         return next()
     }
-    res.redirect('/login')
+    
 }
 
 function checkNotAuthenticated(req, res, next) {

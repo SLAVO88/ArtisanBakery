@@ -4,12 +4,14 @@ if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
 } else {
     ready()
+  
     
 }
 
-function ready() {
+function ready(){
 
     loadCart()
+    
         
     var removeCartItemButtons = document.getElementsByClassName('btn-danger')
     for (var i = 0; i < removeCartItemButtons.length; i++) {
@@ -144,10 +146,10 @@ function addToCartClicked(event) {
     
    
     
-     //i can DELETE ADD ITEM TO CART TOTAL LATER  HERE SO THERE IS NO RECURSIVE OF IT IN ANOTHER
+ 
      addItemToCart(title, price, imageSrc, id, "1")
-    usersCart()
-    // addItemToCart(title, price, imageSrc, id)
+     usersCart()
+   
     updateCartTotal()
     
 }
@@ -156,7 +158,7 @@ function addToCartClicked(event) {
 function usersCart(){
     
     var items = []
-
+    var cartQuantity = ""
     var cartItemContainer = document.getElementsByClassName('cart-items')[0]
     var cartRows = cartItemContainer.getElementsByClassName('cart-row')
     for (i = 0; i < cartRows.length; i++) {
@@ -166,6 +168,7 @@ function usersCart(){
     var imageSrc = cartRow.getElementsByClassName('cart-item-image')[0].src
     var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
     var quantity = quantityElement.value
+    cartQuantity = i + 1
     var id = cartRow.dataset.itemId
     items.push({
         productId: id,
@@ -175,7 +178,9 @@ function usersCart(){
         imageSrc: imageSrc
     })
     }
-    // items2.push({items: items})
+
+    
+    
     fetch('/cart', {
         method: 'POST',
         headers: {
@@ -183,7 +188,7 @@ function usersCart(){
             // 'Accept': 'application/json'
         },
         body: JSON.stringify({
-            items: items
+            items: items, cartQuantity: cartQuantity
 
         })
         }).then(res => {
@@ -198,7 +203,7 @@ function usersCart(){
                 addItemToCart(item.title, item.price, item.imageSrc, item.productId, item.quantity)
                 
             })  
-            console.log(data)
+            document.getElementsByClassName('badge')[0].innerText = cartQuantity 
         }
         ).catch(function(error){
             console.error(error)
@@ -237,12 +242,13 @@ function loadCart() {
         while (cartItems.hasChildNodes()) {
             cartItems.removeChild(cartItems.firstChild)
         } 
-        if (data){
+        if (data.items){
             data.items.forEach(function(item){
                 
                 addItemToCart(item.title, item.price, item.imageSrc, item.productId, item.quantity)
                 
             })  
+            updateCartTotal()
         } else {
             console.log('empty')
         }
@@ -251,4 +257,6 @@ function loadCart() {
     ).catch(function(error){
         console.error(error)
         })
+
+
 }

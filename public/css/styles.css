@@ -525,6 +525,14 @@ footer {
     .cart{
         margin:auto 50px;
     }
+    .cart-icon{
+    
+        margin-top: 1px;
+    }
+    .badge.btn{
+        
+        margin-top: 1px;
+    }
 }
 
 @media only screen and (min-width: 1080px) {
@@ -540,6 +548,8 @@ footer {
         
         
     }
+
+
     .cart-item-title {
         margin-left: 0.5em;
     }
@@ -567,11 +577,11 @@ footer {
        
     }
     .cart-icon{
-        top: 18px;
+      
         margin-top: 1px;
     }
     .badge.btn{
-        top: 18px;
+        
         margin-top: 1px;
     }
     .cart-quantity-input {

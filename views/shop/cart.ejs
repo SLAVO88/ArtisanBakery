@@ -1,5 +1,11 @@
-<script src="js/store.js" defer></script>
 
+    <script src="https://checkout.stripe.com/checkout.js" defer></script>
+
+    <script src="js/store.js" defer></script>
+    <script>
+    var stripePublicKey = '<%= stripePublicKey %>'
+    </script>
+    
 <div class="main-cont">
     <div class="article-win">
 
@@ -29,7 +35,7 @@
                 <span class="cart-total-title">Total:</span>
                 <span class="cart-total-price">£0.00</span>
             </div>
-            <button class="btn btn-primary btn-purchase" type="button">Purchase</butt   on>
+            <button class="btn btn-primary btn-purchase" type="button">Purchase</button>
         </div> 
 
 
